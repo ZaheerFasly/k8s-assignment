@@ -1,35 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webserver
+  name: app
   labels:
-    app.kubernetes.io/name: webserver
+    app.kubernetes.io/name: app
     app.kubernetes.io/component: frontend
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: webserver
+      app.kubernetes.io/name: app
       app.kubernetes.io/component: frontend
   replicas: 1
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: webserver
+        app.kubernetes.io/name: app
         app.kubernetes.io/component: frontend
     spec:
       containers:
-      - name: webserver
+      - name: app
         image: 139675527364.dkr.ecr.us-east-1.amazonaws.com/k8s-assignment:app
         env:
         - name: DBHOST
-          value: mysql.webserver.svc.cluster.local  # Replace with the hostname of your MySQL service
+          value: cluster IP 
         - name: DBUSER
           value: root
         - name: DBPWD
-          value: password  # Replace with your MySQL password
+          value: pwd
         - name: DATABASE
-          value: employees  # Replace with your MySQL database name
+          value: employees
         - name: APP_COLOR
-          value: lime  # Replace with the desired color
+          value: blue
         ports:
         - containerPort: 8080
