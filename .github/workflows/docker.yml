@@ -3,7 +3,7 @@ name: Deploy to ECR
 on:
   push:
     branches: [main]
-
+#pushing
 jobs:
   build:
     name: Build and Push Images
