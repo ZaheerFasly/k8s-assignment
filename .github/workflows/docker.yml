@@ -3,7 +3,7 @@ name: Deploy to ECR
 on:
   push:
     branches: [main]
-#pushing
+
 jobs:
   build:
     name: Build and Push Images
@@ -25,19 +25,29 @@ jobs:
       - name: Build and Push Application Image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: database-ecr #helloeee
-          IMAGE_TAG: v0.1
+          ECR_REPOSITORY: database-ecr
+          IMAGE_TAG: app
         run: |
-          cd docker/
+          cd image/
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
+          
+      - name: Build and Push Application Image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: database-ecr
+          IMAGE_TAG: appv1.0
+        run: |
+          cd image/
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile_update .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          
       - name: Build and Push MySQL Image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: database-ecr
-          IMAGE_TAG: v1.0
+          IMAGE_TAG: mysql
         run: |
-          cd docker/
+          cd image/
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile_mysql .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
