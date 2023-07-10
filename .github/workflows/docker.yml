@@ -3,7 +3,7 @@ name: Deploy to ECR
 on:
   push:
     branches: [main]
-#Rr
+
 jobs:
   build:
     name: Build and Push Images
@@ -17,21 +17,21 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         env:
-         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-         AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-         AWS_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_REGION: us-east-1
 
       - name: Build and Push Application Image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: database-ecr
-          IMAGE_TAG: app
+          IMAGE_TAG: v0.1
         run: |
-          cd image/
+          cd docker/
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          
+
       - name: Build and Push Application Image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -41,13 +41,13 @@ jobs:
           cd image/
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile_update .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          
+
       - name: Build and Push MySQL Image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: database-ecr
-          IMAGE_TAG: mysql
+          IMAGE_TAG: v1.0
         run: |
-          cd image/
+          cd docker/
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile_mysql .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
