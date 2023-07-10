@@ -38,7 +38,7 @@ jobs:
           ECR_REPOSITORY: database-ecr
           IMAGE_TAG: appv1.0
         run: |
-          cd image/
+          cd docker/
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile_update .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
